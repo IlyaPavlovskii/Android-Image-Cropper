@@ -1,18 +1,24 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
-
+    compileSdk rootProject.compileSdkVersion
+    namespace "com.theartofdev.edmodo.cropper.quick.start"
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion rootProject.compileSdkVersion
         versionCode 1
         versionName '1.0'
     }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
+    }
     lintOptions {
         abortOnError false
     }
+//    publishing {
+//        singleVariant("release") {}
+//    }
 }
 
 dependencies {

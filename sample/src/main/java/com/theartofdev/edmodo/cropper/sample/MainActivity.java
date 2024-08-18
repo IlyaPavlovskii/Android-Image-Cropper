@@ -134,9 +134,9 @@ public class MainActivity extends AppCompatActivity {
   }
 
   @Override
-  public void onRequestPermissionsResult(
-      int requestCode, String permissions[], int[] grantResults) {
-    if (requestCode == CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE) {
+  public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+      super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+      if (requestCode == CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE) {
       if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
         CropImage.startPickImageActivity(this);
       } else {
@@ -156,130 +156,130 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
-  @SuppressLint("NewApi")
-  public void onDrawerOptionClicked(View view) {
-    switch (view.getId()) {
-      case R.id.drawer_option_load:
-        if (CropImage.isExplicitCameraPermissionRequired(this)) {
-          requestPermissions(
-              new String[] {Manifest.permission.CAMERA},
-              CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE);
-        } else {
-          CropImage.startPickImageActivity(this);
-        }
-        mDrawerLayout.closeDrawers();
-        break;
-      case R.id.drawer_option_oval:
-        setMainFragmentByPreset(CropDemoPreset.CIRCULAR);
-        mDrawerLayout.closeDrawers();
-        break;
-      case R.id.drawer_option_rect:
-        setMainFragmentByPreset(CropDemoPreset.RECT);
-        mDrawerLayout.closeDrawers();
-        break;
-      case R.id.drawer_option_customized_overlay:
-        setMainFragmentByPreset(CropDemoPreset.CUSTOMIZED_OVERLAY);
-        mDrawerLayout.closeDrawers();
-        break;
-      case R.id.drawer_option_min_max_override:
-        setMainFragmentByPreset(CropDemoPreset.MIN_MAX_OVERRIDE);
-        mDrawerLayout.closeDrawers();
-        break;
-      case R.id.drawer_option_scale_center:
-        setMainFragmentByPreset(CropDemoPreset.SCALE_CENTER_INSIDE);
-        mDrawerLayout.closeDrawers();
-        break;
-      case R.id.drawer_option_toggle_scale:
-        mCropImageViewOptions.scaleType =
-            mCropImageViewOptions.scaleType == CropImageView.ScaleType.FIT_CENTER
-                ? CropImageView.ScaleType.CENTER_INSIDE
-                : mCropImageViewOptions.scaleType == CropImageView.ScaleType.CENTER_INSIDE
-                    ? CropImageView.ScaleType.CENTER
-                    : mCropImageViewOptions.scaleType == CropImageView.ScaleType.CENTER
-                        ? CropImageView.ScaleType.CENTER_CROP
-                        : CropImageView.ScaleType.FIT_CENTER;
-        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
-        updateDrawerTogglesByOptions(mCropImageViewOptions);
-        break;
-      case R.id.drawer_option_toggle_shape:
-        mCropImageViewOptions.cropShape =
-            mCropImageViewOptions.cropShape == CropImageView.CropShape.RECTANGLE
-                ? CropImageView.CropShape.OVAL
-                : CropImageView.CropShape.RECTANGLE;
-        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
-        updateDrawerTogglesByOptions(mCropImageViewOptions);
-        break;
-      case R.id.drawer_option_toggle_guidelines:
-        mCropImageViewOptions.guidelines =
-            mCropImageViewOptions.guidelines == CropImageView.Guidelines.OFF
-                ? CropImageView.Guidelines.ON
-                : mCropImageViewOptions.guidelines == CropImageView.Guidelines.ON
-                    ? CropImageView.Guidelines.ON_TOUCH
-                    : CropImageView.Guidelines.OFF;
-        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
-        updateDrawerTogglesByOptions(mCropImageViewOptions);
-        break;
-      case R.id.drawer_option_toggle_aspect_ratio:
-        if (!mCropImageViewOptions.fixAspectRatio) {
-          mCropImageViewOptions.fixAspectRatio = true;
-          mCropImageViewOptions.aspectRatio = new Pair<>(1, 1);
-        } else {
-          if (mCropImageViewOptions.aspectRatio.first == 1
-              && mCropImageViewOptions.aspectRatio.second == 1) {
-            mCropImageViewOptions.aspectRatio = new Pair<>(4, 3);
-          } else if (mCropImageViewOptions.aspectRatio.first == 4
-              && mCropImageViewOptions.aspectRatio.second == 3) {
-            mCropImageViewOptions.aspectRatio = new Pair<>(16, 9);
-          } else if (mCropImageViewOptions.aspectRatio.first == 16
-              && mCropImageViewOptions.aspectRatio.second == 9) {
-            mCropImageViewOptions.aspectRatio = new Pair<>(9, 16);
-          } else {
-            mCropImageViewOptions.fixAspectRatio = false;
-          }
-        }
-        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
-        updateDrawerTogglesByOptions(mCropImageViewOptions);
-        break;
-      case R.id.drawer_option_toggle_auto_zoom:
-        mCropImageViewOptions.autoZoomEnabled = !mCropImageViewOptions.autoZoomEnabled;
-        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
-        updateDrawerTogglesByOptions(mCropImageViewOptions);
-        break;
-      case R.id.drawer_option_toggle_max_zoom:
-        mCropImageViewOptions.maxZoomLevel =
-            mCropImageViewOptions.maxZoomLevel == 4
-                ? 8
-                : mCropImageViewOptions.maxZoomLevel == 8 ? 2 : 4;
-        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
-        updateDrawerTogglesByOptions(mCropImageViewOptions);
-        break;
-      case R.id.drawer_option_set_initial_crop_rect:
-        mCurrentFragment.setInitialCropRect();
-        mDrawerLayout.closeDrawers();
-        break;
-      case R.id.drawer_option_reset_crop_rect:
-        mCurrentFragment.resetCropRect();
-        mDrawerLayout.closeDrawers();
-        break;
-      case R.id.drawer_option_toggle_multitouch:
-        mCropImageViewOptions.multitouch = !mCropImageViewOptions.multitouch;
-        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
-        updateDrawerTogglesByOptions(mCropImageViewOptions);
-        break;
-      case R.id.drawer_option_toggle_show_overlay:
-        mCropImageViewOptions.showCropOverlay = !mCropImageViewOptions.showCropOverlay;
-        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
-        updateDrawerTogglesByOptions(mCropImageViewOptions);
-        break;
-      case R.id.drawer_option_toggle_show_progress_bar:
-        mCropImageViewOptions.showProgressBar = !mCropImageViewOptions.showProgressBar;
-        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
-        updateDrawerTogglesByOptions(mCropImageViewOptions);
-        break;
-      default:
-        Toast.makeText(this, "Unknown drawer option clicked", Toast.LENGTH_LONG).show();
-    }
-  }
+//  @SuppressLint("NewApi")
+//  public void onDrawerOptionClicked(View view) {
+//    switch (view.getId()) {
+//      case R.id.drawer_option_load:
+//        if (CropImage.isExplicitCameraPermissionRequired(this)) {
+//          requestPermissions(
+//              new String[] {Manifest.permission.CAMERA},
+//              CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE);
+//        } else {
+//          CropImage.startPickImageActivity(this);
+//        }
+//        mDrawerLayout.closeDrawers();
+//        break;
+//      case R.id.drawer_option_oval:
+//        setMainFragmentByPreset(CropDemoPreset.CIRCULAR);
+//        mDrawerLayout.closeDrawers();
+//        break;
+//      case R.id.drawer_option_rect:
+//        setMainFragmentByPreset(CropDemoPreset.RECT);
+//        mDrawerLayout.closeDrawers();
+//        break;
+//      case R.id.drawer_option_customized_overlay:
+//        setMainFragmentByPreset(CropDemoPreset.CUSTOMIZED_OVERLAY);
+//        mDrawerLayout.closeDrawers();
+//        break;
+//      case R.id.drawer_option_min_max_override:
+//        setMainFragmentByPreset(CropDemoPreset.MIN_MAX_OVERRIDE);
+//        mDrawerLayout.closeDrawers();
+//        break;
+//      case R.id.drawer_option_scale_center:
+//        setMainFragmentByPreset(CropDemoPreset.SCALE_CENTER_INSIDE);
+//        mDrawerLayout.closeDrawers();
+//        break;
+//      case R.id.drawer_option_toggle_scale:
+//        mCropImageViewOptions.scaleType =
+//            mCropImageViewOptions.scaleType == CropImageView.ScaleType.FIT_CENTER
+//                ? CropImageView.ScaleType.CENTER_INSIDE
+//                : mCropImageViewOptions.scaleType == CropImageView.ScaleType.CENTER_INSIDE
+//                    ? CropImageView.ScaleType.CENTER
+//                    : mCropImageViewOptions.scaleType == CropImageView.ScaleType.CENTER
+//                        ? CropImageView.ScaleType.CENTER_CROP
+//                        : CropImageView.ScaleType.FIT_CENTER;
+//        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
+//        updateDrawerTogglesByOptions(mCropImageViewOptions);
+//        break;
+//      case R.id.drawer_option_toggle_shape:
+//        mCropImageViewOptions.cropShape =
+//            mCropImageViewOptions.cropShape == CropImageView.CropShape.RECTANGLE
+//                ? CropImageView.CropShape.OVAL
+//                : CropImageView.CropShape.RECTANGLE;
+//        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
+//        updateDrawerTogglesByOptions(mCropImageViewOptions);
+//        break;
+//      case R.id.drawer_option_toggle_guidelines:
+//        mCropImageViewOptions.guidelines =
+//            mCropImageViewOptions.guidelines == CropImageView.Guidelines.OFF
+//                ? CropImageView.Guidelines.ON
+//                : mCropImageViewOptions.guidelines == CropImageView.Guidelines.ON
+//                    ? CropImageView.Guidelines.ON_TOUCH
+//                    : CropImageView.Guidelines.OFF;
+//        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
+//        updateDrawerTogglesByOptions(mCropImageViewOptions);
+//        break;
+//      case R.id.drawer_option_toggle_aspect_ratio:
+//        if (!mCropImageViewOptions.fixAspectRatio) {
+//          mCropImageViewOptions.fixAspectRatio = true;
+//          mCropImageViewOptions.aspectRatio = new Pair<>(1, 1);
+//        } else {
+//          if (mCropImageViewOptions.aspectRatio.first == 1
+//              && mCropImageViewOptions.aspectRatio.second == 1) {
+//            mCropImageViewOptions.aspectRatio = new Pair<>(4, 3);
+//          } else if (mCropImageViewOptions.aspectRatio.first == 4
+//              && mCropImageViewOptions.aspectRatio.second == 3) {
+//            mCropImageViewOptions.aspectRatio = new Pair<>(16, 9);
+//          } else if (mCropImageViewOptions.aspectRatio.first == 16
+//              && mCropImageViewOptions.aspectRatio.second == 9) {
+//            mCropImageViewOptions.aspectRatio = new Pair<>(9, 16);
+//          } else {
+//            mCropImageViewOptions.fixAspectRatio = false;
+//          }
+//        }
+//        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
+//        updateDrawerTogglesByOptions(mCropImageViewOptions);
+//        break;
+//      case R.id.drawer_option_toggle_auto_zoom:
+//        mCropImageViewOptions.autoZoomEnabled = !mCropImageViewOptions.autoZoomEnabled;
+//        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
+//        updateDrawerTogglesByOptions(mCropImageViewOptions);
+//        break;
+//      case R.id.drawer_option_toggle_max_zoom:
+//        mCropImageViewOptions.maxZoomLevel =
+//            mCropImageViewOptions.maxZoomLevel == 4
+//                ? 8
+//                : mCropImageViewOptions.maxZoomLevel == 8 ? 2 : 4;
+//        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
+//        updateDrawerTogglesByOptions(mCropImageViewOptions);
+//        break;
+//      case R.id.drawer_option_set_initial_crop_rect:
+//        mCurrentFragment.setInitialCropRect();
+//        mDrawerLayout.closeDrawers();
+//        break;
+//      case R.id.drawer_option_reset_crop_rect:
+//        mCurrentFragment.resetCropRect();
+//        mDrawerLayout.closeDrawers();
+//        break;
+//      case R.id.drawer_option_toggle_multitouch:
+//        mCropImageViewOptions.multitouch = !mCropImageViewOptions.multitouch;
+//        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
+//        updateDrawerTogglesByOptions(mCropImageViewOptions);
+//        break;
+//      case R.id.drawer_option_toggle_show_overlay:
+//        mCropImageViewOptions.showCropOverlay = !mCropImageViewOptions.showCropOverlay;
+//        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
+//        updateDrawerTogglesByOptions(mCropImageViewOptions);
+//        break;
+//      case R.id.drawer_option_toggle_show_progress_bar:
+//        mCropImageViewOptions.showProgressBar = !mCropImageViewOptions.showProgressBar;
+//        mCurrentFragment.setCropImageViewOptions(mCropImageViewOptions);
+//        updateDrawerTogglesByOptions(mCropImageViewOptions);
+//        break;
+//      default:
+//        Toast.makeText(this, "Unknown drawer option clicked", Toast.LENGTH_LONG).show();
+//    }
+//  }
 
   private void setMainFragmentByPreset(CropDemoPreset demoPreset) {
     FragmentManager fragmentManager = getSupportFragmentManager();
